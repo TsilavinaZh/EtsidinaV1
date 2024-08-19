@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Game Entry</title>
+    <style>
+        /* Your CSS here */
+    </style>
+    <style>
+        body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0e0b16;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    text-align: center;
+    max-width: 600px;
+    padding: 60px;
+    background: #333;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #ff5722;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+button {
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+#startBtn {
+    background: #ff5722;
+    color: #fff;
+}
+
+#tutoBtn {
+    background: #4caf50;
+    color: #fff;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1f1a3d;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    z-index: 1000;
+    animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+.popup-content {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+
+.popup-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+.popup button {
+    background: #ff5722;
+    color: white;
+}
+
+.popup button#prevBtn {
+    background: #888;
+}
+
+.popup button:disabled {
+    background: #888;
+    cursor: not-allowed;
+}
+
+.logo {
+    width: 280px;
+    border-radius: 15px;
+}
+
+@media (max-width: 600px) {
+    body {
+        background-color: #333;
+    }
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #1b1b1b;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.game-container {
+    text-align: center;
+    background: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.game-area {
+    margin-top: 20px;
+}
+
+.game-screen {
+    position: relative;
+    background: #ffffff;
+    border: 2px solid #444;
+    height: 300px;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#airplane {
+    width: 80px;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    transition: transform 0.1s ease-out;
+}
+
+#multiplier {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    color: #1b1b1b;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.balance-bet {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.balance-bet div {
+    font-size: 1.2em;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    background: #ff5722;
+    color: white;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+    max-width: 150px;
+}
+
+button:disabled {
+    background: #888;
+}
+
+button:hover:not(:disabled) {
+    background: #e64a19;
+}
+
+#stopButton.win {
+    background: #4caf50;
+}
+
+/* Popup Styling */
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #444;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    z-index: 1000;
+}
+
+.popup h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+.popup button {
+    padding: 10px 20px;
+    font-size: 1em;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+.currency-select {
+    margin: 20px 0;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#currency {
+    padding: 5px;
+    font-size: 1em;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #888;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#currency:disabled {
+    background: #888;
+    cursor: not-allowed;
+}
+
+/* Skeleton Loading Styles */
+.skeleton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #333 25%, #444 50%, #333 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 10px;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <!-- Entry Page -->
+    <div class="container" id="entryContainer">
+        <h1>E-Game</h1>
+        <img src="./logo.png" class="logo"><br>
+        <button id="startBtn">Start Game</button><br>
+        <button id="tutoBtn">Tutorial</button>
+    </div>
+
+    <!-- Tutorial Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="popup">
+        <div class="popup-content" id="tutorialContent">Welcome to the Etsidina Game Tutorial! In this game, you will
+            bet on the airplane's flight and claim your winnings before it crashes.</div>
+        <div class="popup-buttons">
+            <button id="prevBtn" disabled>Prev</button>
+            <button id="nextBtn">Next</button>
+        </div>
+    </div>
+
+    <!-- Game Page -->
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <div class="skeleton" style="display: none;"></div>
+        <div class="header">
+            <h1 style="color: #ff5722; text-decoration-style: dashed;">E-Game</h1>
+        </div>
+        <div class="balance-bet">
+            <div id="balance">Solde: 165.62 Ar</div>
+        </div>
+        <div class="currency-select">
+            <label for="currency">Currency: </label>
+            <select id="currency" readonly="">
+                <option value="Ar" selected="">Ariary</option>
+            </select>
+            <button id="depositButton">Deposit</button><button id="historyButton">History</button>
+        </div>
+        <div class="game-area">
+            <div class="game-screen">
+                <img id="airplane" src="depart.jpg" alt="Airplane" style="transform: none;">
+                <div id="multiplier">2.66x</div>
+            </div>
+        </div>
+        <div class="balance-bet" style="display: flex;justify-content: center;flex-direction: row;flex-wrap: nowrap;">
+            <button id="decreaseBetButton" style="width: 5px;"> - </button>
+            <div id="bet">Bet: 160.00 Ar</div>
+            <button id="increaseBetButton" style="width: 5px;"> + </button>
+        </div>
+        <div class="controls">
+            <button id="startButton">Start</button>
+            <button id="stopButton" disabled="" class="win">Claim</button>
+        </div>
+    </div>
+
+    <!-- History Popup -->
+    <div class="overlay" id="historyOverlay" style="display: none;"></div>
+    <div class="popup" id="historyPopup" style="display: none;">
+        <h2>History</h2>
+        <div id="historyContent"></div>
+        <button id="closeHistoryPopup">Close</button>
+    </div>
+
+    <!-- General Popup and Overlay -->
+    <div class="overlay" id="generalOverlay" style="display: none;"></div>
+    <div class="popup" id="generalPopup" style="display: none;">
+        <h2 id="popupMessage">You Won 425.62 Ar!</h2>
+        <button id="closePopup">Close</button>
+    </div>
+
+    <!-- Deposit Popup -->
+    <div class="overlay" id="depositOverlay"></div>
+    <div class="popup" id="depositPopup">
+        <h2>Deposit Funds</h2>
+        <input type="number" id="depositAmount" placeholder="Amount">
+        <button id="depositConfirm">Add to Balance</button>
+    </div>
+
+    <script>
+        // Entry Page Elements
+        const startBtn = document.getElementById('startBtn');
+        const tutoBtn = document.getElementById('tutoBtn');
+        const overlay = document.getElementById('overlay');
+        const popup = document.getElementById('popup');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const tutorialContent = document.getElementById('tutorialContent');
+        const entryContainer = document.getElementById('entryContainer');
+        const gameContainer = document.getElementById('gameContainer');
+
+        const tutorialSteps = [
+            "Welcome to the Etsidina Tutorial! In this game, you will bet on the airplane's flight and claim your winnings before it crashes.",
+            "Step 1: Start by placing a bet. You can select your currency and deposit funds if necessary.",
+            "Step 2: Hit the 'Start' button to begin the flight. Watch the multiplier increase as the airplane climbs.",
+            "Step 3: Press 'Claim' before the airplane crashes to secure your winnings. If you wait too long, you lose!",
+            "Now you're ready to play! Hit 'Start Game' and enjoy!"
+        ];
+
+        let currentStep = 0;
+
+        function updateTutorial() {
+            tutorialContent.textContent = tutorialSteps[currentStep];
+            prevBtn.disabled = currentStep === 0;
+            nextBtn.textContent = currentStep === tutorialSteps.length - 1 ? 'Finish' : 'Next';
+        }
+
+        function closePopup() {
+            overlay.style.display = 'none';
+            popup.style.display = 'none';
+        }
+
+        startBtn.addEventListener('click', () => {
+            entryContainer.style.display = 'none';
+            gameContainer.style.display = 'block';
+        });
+
+        tutoBtn.addEventListener('click', () => {
+            overlay.style.display = 'block';
+            popup.style.display = 'block';
+            currentStep = 0;
+            updateTutorial();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 0) {
+                currentStep--;
+                updateTutorial();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < tutorialSteps.length - 1) {
+                currentStep++;
+                updateTutorial();
+            } else {
+                closePopup();
+            }
+        });
+
+        // Game Page Elements
+        let multiplier = 1;
+        let interval;
+        let isFlying = false;
+        let balance = 100.00;
+        let bet = 100.00;
+        let currency = 'Ar';
+        let history = [];
+
+        const airplane = document.getElementById('airplane');
+        const multiplierDisplay = document.getElementById('multiplier');
+        const startButton = document.getElementById('startButton');
+        const stopButton = document.getElementById('stopButton');
+        const balanceDisplay = document.getElementById('balance');
+        const betDisplay = document.getElementById('bet');
+        const currencySelect = document.getElementById('currency');
+        const generalPopup = document.getElementById('generalPopup');
+        const generalOverlay = document.getElementById('generalOverlay');
+        const popupMessage = document.getElementById('popupMessage');
+        const closePopupButton = document.getElementById('closePopup');
+        const depositButton = document.getElementById('depositButton');
+        const depositOverlay = document.getElementById('depositOverlay');
+        const depositPopup = document.getElementById('depositPopup');
+        const depositConfirm = document.getElementById('depositConfirm');
+        const depositAmount = document.getElementById('depositAmount');
+        const historyButton = document.getElementById('historyButton');
+        const historyOverlay = document.getElementById('historyOverlay');
+        const historyPopup = document.getElementById('historyPopup');
+        const historyContent = document.getElementById('historyContent');
+        const closeHistoryPopupButton = document.getElementById('closeHistoryPopup');
+        const AIRPLANE_GROUNDED = 'depart.jpg';
+        const AIRPLANE_FLYING = 'fly.jpg';
+        const AIRPLANE_CRASHED = 'depart.jpg';
+
+        function updateDisplays() {
+            balanceDisplay.textContent = `Solde: ${balance.toFixed(2)} ${currency}`;
+            betDisplay.textContent = `Bet: ${bet.toFixed(2)} ${currency}`;
+        }
+
+        function startFlight() {
+            isFlying = true;
+            multiplier = 1;
+            multiplierDisplay.textContent = `${multiplier.toFixed(2)}x`;
+            airplane.src = AIRPLANE_FLYING;
+            balance -= bet;
+            updateDisplays();
+
+            interval = setInterval(() => {
+                multiplier += Math.random() * 0.1;
+                multiplierDisplay.textContent = `${multiplier.toFixed(2)}x`;
+
+                const transformValue = `translate(${multiplier * 10}px, ${-multiplier * 5}px)`;
+                airplane.style.transform = transformValue;
+
+                if (Math.random() < 0.01) {
+                    crash();
+                }
+            }, 100);
+
+            startButton.disabled = true;
+            stopButton.disabled = false;
+            stopButton.classList.remove('win');
+            currencySelect.disabled = true;
+            depositButton.disabled = true;
+        }
+
+        function stopFlight() {
+            clearInterval(interval);
+            isFlying = false;
+            airplane.src = AIRPLANE_GROUNDED;
+            balance += bet * multiplier;
+            history.push(`Won: ${(bet * multiplier).toFixed(2)} ${currency} (Multiplier: ${multiplier.toFixed(2)}x)`);
+            showPopup(`You Won ${(bet * multiplier).toFixed(2)} ${currency}!`);
+            updateDisplays();
+            resetGame();
+        }
+
+        function crash() {
+            clearInterval(interval);
+            isFlying = false;
+            airplane.src = AIRPLANE_CRASHED;
+            history.push(`Lost: ${bet.toFixed(2)} ${currency} (Multiplier: ${multiplier.toFixed(2)}x)`);
+            showPopup(`You Lost ${bet.toFixed(2)} ${currency}`);
+            updateDisplays();
+            resetGame();
+        }
+
+        function resetGame() {
+            startButton.disabled = false;
+            stopButton.disabled = true;
+            stopButton.classList.add('win');
+            currencySelect.disabled = false;
+            depositButton.disabled = false;
+        }
+
+        function showPopup(message) {
+            popupMessage.textContent = message;
+            generalOverlay.style.display = 'block';
+            generalPopup.style.display = 'block';
+        }
+
+        function closeGeneralPopup() {
+            generalOverlay.style.display = 'none';
+            generalPopup.style.display = 'none';
+        }
+
+        function openDepositPopup() {
+            depositOverlay.style.display = 'block';
+            depositPopup.style.display = 'block';
+        }
+
+        function closeDepositPopup() {
+            depositOverlay.style.display = 'none';
+            depositPopup.style.display = 'none';
+        }
+
+        function confirmDeposit() {
+            const amount = parseFloat(depositAmount.value);
+            if (!isNaN(amount) && amount > 0) {
+                balance += amount;
+                updateDisplays();
+                closeDepositPopup();
+            } else {
+                alert('Please enter a valid amount.');
+            }
+        }
+
+        function openHistoryPopup() {
+            historyContent.innerHTML = history.map(entry => `<div>${entry}</div>`).join('');
+            historyOverlay.style.display = 'block';
+            historyPopup.style.display = 'block';
+        }
+
+        function closeHistoryPopup() {
+            historyOverlay.style.display = 'none';
+            historyPopup.style.display = 'none';
+        }
+
+        startButton.addEventListener('click', startFlight);
+        stopButton.addEventListener('click', stopFlight);
+        closePopupButton.addEventListener('click', closeGeneralPopup);
+        depositButton.addEventListener('click', openDepositPopup);
+        depositConfirm.addEventListener('click', confirmDeposit);
+        historyButton.addEventListener('click', openHistoryPopup);
+        closeHistoryPopupButton.addEventListener('click', closeHistoryPopup);
+
+        updateDisplays();
+
+        // Add these lines at the appropriate place in your script
+
+        const decreaseBetButton = document.getElementById('decreaseBetButton');
+        const increaseBetButton = document.getElementById('increaseBetButton');
+
+        decreaseBetButton.addEventListener('click', () => {
+            if (bet > 0) {
+                bet -= 10; // Adjust the decrement value as needed
+                updateDisplays();
+            }
+        });
+
+        increaseBetButton.addEventListener('click', () => {
+            bet += 10; // Adjust the increment value as needed
+            updateDisplays();
+        });
+
+        function updateDisplays() {
+            balanceDisplay.textContent = `Solde: ${balance.toFixed(2)} ${currency}`;
+            betDisplay.textContent = `Bet: ${bet.toFixed(2)} ${currency}`;
+        }
+
+        // Ensure these elements are properly defined above
+        // const balanceDisplay = document.getElementById('balance');
+        // const betDisplay = document.getElementById('bet')
+    </script>
+</body>
+
+</html>
